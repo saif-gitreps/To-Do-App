@@ -22,10 +22,8 @@ def add_new_task(task: str):
     
     currentDate = dt.now().strftime("%d-%m-%Y")
     
-    if len(dataMap)+1 in dataMap:
-        dataMap[len(dataMap)+2]=  {"task": task,"date":currentDate}    
-    else: 
-        dataMap[len(dataMap)+1]=  {"task": task,"date":currentDate}
+    dataMap["counter"] += 1
+    dataMap[dataMap["counter"]]=  {"task": task,"date":currentDate}    
     
     with open(dataFile,"w") as file:
         json.dump(dataMap,file)
@@ -36,11 +34,26 @@ def update_task(task_id: str, updateTask : Task):
     with open(dataFile,"r") as file:
         dataMap = json.load(file)
     if task_id not in dataMap or task_id < 0:
-        return {"message" : "no such task exists"}
+        return {"message" : "no such task"}
     dataMap[task_id]["task"] = updateTask.task
     with open(dataFile, "w") as file:
         json.dump(dataMap,file)
-    return {"message":"task updated successfully"} 
+    return {"message":"task updated successfully"}
+
+@app.delete("/task/delete")
+def delete_task(task_id: str):
+    with open(dataFile,"r") as file:
+        dataMap = json.load(file)
+    if task_id not in dataMap:
+        return {"message": "no such tasks"}
+    del dataMap[task_id]
+    with open(dataFile, "w") as file:
+        json.dump(dataMap, file)
+    return {"message" : "task deleted successfully"}
+
+
+
+
 
      
 
