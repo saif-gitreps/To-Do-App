@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Body
+from fastapi import FastAPI
 from datetime import datetime as dt
 from pydantic import BaseModel
 import json
